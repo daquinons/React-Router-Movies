@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
 export default class Movie extends Component {
   constructor(props) {
@@ -11,8 +11,12 @@ export default class Movie extends Component {
 
   componentDidMount() {
     // change this line to grab the id passed on the URL
-    const { id } = this.props.match.params;
-    this.fetchMovie(id);
+    if (this.props.movie) {
+      this.setState({ movie: this.props.movie });
+    } else {
+      const { id } = this.props.match.params;
+      this.fetchMovie(id);
+    }
   }
 
   fetchMovie = id => {
