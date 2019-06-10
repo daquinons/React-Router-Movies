@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import MovieCard from "./MovieCard";
 import Movie from "./Movie";
 import axios from "axios";
 
@@ -26,9 +25,7 @@ export default class MovieList extends Component {
     return (
       <div className="movie-list">
         {this.state.movies.map(movie => (
-          <MovieCard movie={movie}>
-            <Movie key={movie.id} movie={movie} />
-          </MovieCard>
+          <Movie key={movie.id} movie={movie} onSave={this.props.onSave} />
         ))}
       </div>
     );
