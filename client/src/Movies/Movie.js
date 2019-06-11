@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default class Movie extends Component {
   constructor(props) {
@@ -11,8 +12,12 @@ export default class Movie extends Component {
 
   componentDidMount() {
     // change this line to grab the id passed on the URL
-    const id = 1;
-    this.fetchMovie(id);
+    if (this.props.movie) {
+      this.setState({ movie: this.props.movie });
+    } else {
+      const { id } = this.props.match.params;
+      this.fetchMovie(id);
+    }
   }
 
   fetchMovie = id => {
@@ -25,18 +30,21 @@ export default class Movie extends Component {
         console.error(error);
       });
   };
-  // Uncomment this code when you're ready for the stretch problems
-  // componentWillReceiveProps(newProps){
-  //   if(this.props.match.params.id !== newProps.match.params.id){
-  //     this.fetchMovie(newProps.match.params.id);
-  //   }
-  // }
 
-  // saveMovie = () => {
-  //   const addToSavedList = this.props.addToSavedList;
-  //   addToSavedList(this.state.movie)
-  // }
+  componentWillReceiveProps(newProps) {
+    if (
+      this.props.match &&
+      this.props.match.params.id !== newProps.match.params.id
+    ) {
+      this.fetchMovie(newProps.match.params.id);
+    }
+  }
 
+  saveMovie = () => {
+    const addToSavedList = this.props.onSave;
+    addToSavedList(this.state.movie);
+  };
+  const =``;
   render() {
     if (!this.state.movie) {
       return <div>Loading movie information...</div>;
@@ -45,6 +53,7 @@ export default class Movie extends Component {
     const { title, director, metascore, stars } = this.state.movie;
     return (
       <div className="save-wrapper">
+        <Link to={`movies/${this.state.movie.id}`} >
         <div className="movie-card">
           <h2>{title}</h2>
           <div className="movie-director">
@@ -61,7 +70,10 @@ export default class Movie extends Component {
             </div>
           ))}
         </div>
-        <div className="save-button">Save</div>
+        </Link>
+        <div className="save-button" onClick={this.saveMovie.bind(this)}>
+          Save
+        </div>
       </div>
     );
   }
